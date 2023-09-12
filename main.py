@@ -9,6 +9,30 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///oldcafes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+## User Table configuration
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(250), unique=True, nullable=False)
+    name = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=False)
+    membership_status = db.Column(db.VARCHAR(10), nullable=False) # "basic", "premium", "admin"
+    # weight should be either kg or lbs
+    weight_value = db.Column(db.Float, nullable=False)
+    weight_unit = db.Column(db.VARCHAR(5), nullable=False)
+    height_value = db.Column(db.Float, nullable=False)
+    height_unit = db.Column(db.VARCHAR(5), nullable=False)
+
+
+    def to_dict(self):
+        # I'm returning a dictionary representation of the User object.
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+        # dict = {}
+        # # Loop through each column in the data record
+        # for column in self.__table__.columns:
+        #     dict[column.name] = getattr(self, column.name)
+        # return dict
+
+
 ##Cafe TABLE Configuration
 class Cafe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -83,7 +107,23 @@ def location():
         return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
 
-@app.route("/add", methods=["POST"])
+# Route for all the users
+@app.route("/users"), methods=["GET", "POST"]
+def get_all_users():
+    users = db.session.query(User).all()
+    user_length = len(users)
+    new_user = User(
+        email=request.form.get("email"),
+        name=request.form.get("name"),
+        password=request.form.get("password"),
+        membership_status=request.form.get("membership_status"),
+        weight_value=request.form.get("weight_value"),
+        weight_unit=request.form.get("weight_unit"),
+        height_value=request.form.get("height_value"),
+        height_unit=request.form.get("height_unit"),
+    )
+
+@app.route("/add", methods=["GET", "POST"])
 def post_new_cafe():
     cafes = db.session.query(Cafe).all()
     cafe_length = len(cafes)
@@ -119,4 +159,4 @@ def random():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5555)
+    app.run(debug=True, host='0.0.0.0', port=8000)

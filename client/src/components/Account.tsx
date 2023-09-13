@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Navbar from './Navbar.tsx'
 import { Center, Box, Text, Button } from '@chakra-ui/react'
 import {
@@ -14,21 +14,54 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 
-// We're fetching random user data, on refresh we pull a new random user
+// We're fetching random user data, on refresh we pull a new random user, we are only updating username with patch requests.
 export default function Account() {
+   const baseURL = 'http://127.0.0.1:8000'
+
+   interface User {
+      name: string
+      email: string
+      membership_status: string
+      weight_value: number
+      height_value: number
+      weight_unit: string
+      height_unit: string
+      id: number
+   }
+
    const [userData, setUserData] = useState({
       name: 'John Doe',
       email: 'John@example.com',
       membership_status: 'Basic',
-      weight_value: '180',
+      weight_value: 180,
       weight_unit: 'lbs',
-      height_value: '6',
+      height_value: 6,
       height_unit: 'ft',
+      id: 1,
    })
 
-   const baseURL = 'http://127.0.0.1:8000'
+   const updateUser = useCallback(async (id: number, updatedUserData: User) => {
+      try {
+         // Send the updated data in the request body
+         const response = await axios.patch(`${baseURL}/update/${id}`, updatedUserData)
+
+         // Assuming the server responds with the updated user data
+         const updatedUser = response.data
+
+         // Update the local userData state with the new data
+         setUserData(updatedUser)
+
+         // Handle success or perform any necessary actions after updating.
+         console.log('User updated successfully:', updatedUser)
+      } catch (error) {
+         // Handle errors if the request fails.
+         console.error('Delete user failed:', error)
+      }
+   }, [])
+
    useEffect(() => {
       axios
+         // .get(`${baseURL}/random_user`) // Use template literals
          .get(`${baseURL}/random_user`) // Use template literals
          .then((res) => {
             console.log(res.data)
@@ -51,6 +84,21 @@ export default function Account() {
    }
 
    const handleSaveButton = () => {
+      const updatedUserData = {
+         name: userData.name,
+         email: userData.email,
+         membership_status: userData.membership_status,
+         weight_value: userData.weight_value,
+         height_value: userData.height_value,
+         id: userData.id,
+         weight_unit: userData.weight_unit,
+         height_unit: userData.height_unit,
+      }
+
+      // Call the updateUser function to send the updated data to the server
+      updateUser(userData.id, updatedUserData)
+
+      // Exit edit mode
       setIsEditMode(false)
    }
 

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
 from flask import jsonify
@@ -81,43 +81,28 @@ def update_price(cafe_id):
 
 
 
-
-@app.route("/report-closed/<int:cafe_id>", methods=["DELETE"])
-def delete_cafe(cafe_id):
-    delete_cafe = db.session.query(Cafe).filter_by(id=cafe_id) .first()
-    pick_cafe = request.args.get("api-key")
-    if delete_cafe and pick_cafe == "TopSecretAPIKey":
-        db.session.delete(delete_cafe)
-        db.session.commit()
-        return jsonify(response={"success": "Successfully deleted the cafe."})
-    else:
-        return jsonify(error={"Not Found": "Sorry, a cafe with that id was not found."})
-
-
-
-
-@app.route("/allcafe")
-def all_cafes():
-    cafes = db.session.query(Cafe).all()
-    return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
-
-
-@app.route("/search")
-def location():
-    query_location = request.args.get("loc")
-    cafe = db.session.query(Cafe).filter_by(location=query_location).first()
-    if cafe:
-        return jsonify(cafes=cafe.to_dict())
-    else:
-        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
-
-
 # Get user by id Number
 @app.route("/users/<int:id>", methods=["GET"])
 def get_user_by_id(id):
     user = db.session.query(User).filter_by(id=id).first()
     if user:
+        new_user = request.args.get("new_user")
         return jsonify(user=user.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a user with that id."})
+
+# GET data from the form and Update user information by id Number
+@app.route("/update/<int:id>", methods=["GET", "PATCH"])
+def update_user(id):
+    user = db.session.query(User).filter_by(id=id).first()
+    if user:
+        new_name = request.get_json().get("name")
+        if new_name:
+            user.name = new_name
+            db.session.commit()
+            return jsonify(response={"success": "Successfully updated the name."})
+        else:
+            return jsonify(error={"Bad Request": "No name provided."})
     else:
         return jsonify(error={"Not Found": "Sorry, we don't have a user with that id."})
 
@@ -185,13 +170,16 @@ def random():
     return jsonify(user.to_dict())
 
 
-## HTTP GET - Read Record
+@app.route("/search")
+def location():
+    query_location = request.args.get("loc")
+    cafe = db.session.query(Cafe).filter_by(location=query_location).first()
+    if cafe:
+        return jsonify(cafes=cafe.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
-## HTTP POST - Create Record
 
-## HTTP PUT/PATCH - Update Record
-
-## HTTP DELETE - Delete Record
 
 
 if __name__ == '__main__':

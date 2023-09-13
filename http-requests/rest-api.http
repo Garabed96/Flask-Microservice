@@ -40,3 +40,13 @@ Content-Type: application/json
 DELETE http://127.0.0.1:8000/delete/7
 Accept: application/json
 Content-Type: application/json
+
+### Update a user based off of their id number
+
+PATCH http://127.0.0.1:8000/update/6
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "JON BONES JONES"
+}

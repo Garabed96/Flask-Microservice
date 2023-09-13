@@ -9,7 +9,7 @@ import {
    TableContainer,
    Button,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 export default function AdminTable() {
    interface User {
@@ -27,15 +27,19 @@ export default function AdminTable() {
 
    const baseURL = 'http://127.0.0.1:8000'
 
-   const deleteUser = async (id: number) => {
-      try {
-         await axios.delete(`${baseURL}/delete/${id}`)
-         // Handle success or perform any necessary actions after deletion.
-      } catch (error) {
-         // Handle errors if the request fails.
-         console.error('Delete user failed:', error)
-      }
-   }
+   const deleteUser = useCallback(
+      async (id: number) => {
+         try {
+            await axios.delete(`${baseURL}/delete/${id}`)
+            // Handle success or perform any necessary actions after deletion.
+            setUserData((prevUserData) => prevUserData.filter((user) => user.id !== id))
+         } catch (error) {
+            // Handle errors if the request fails.
+            console.error('Delete user failed:', error)
+         }
+      },
+      [baseURL],
+   )
 
    useEffect(() => {
       axios

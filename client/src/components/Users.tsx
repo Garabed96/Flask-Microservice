@@ -7,7 +7,7 @@ export default function Users() {
          <Navbar />
          <Box mt="4rem">
             <Center>
-               <Text mt={'8'}>User List Page</Text>
+               <Text m={'8'}>List All Users</Text>
             </Center>
          </Box>
          <Box m={4}>

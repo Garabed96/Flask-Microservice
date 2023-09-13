@@ -1,0 +1,23 @@
+GET http://127.0.0.1:8000/all
+Accept: application/json
+
+<> 2023-09-13T113653.200.json
+<> 2023-09-13T113635.200.html
+
+###
+POST http://127.0.0.1:8000/adduser
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Michael Johnson",
+    "email": "michael@email.com",
+    "password": "123456",
+    "membership_status": "basic",
+    "weight_value": "75",
+    "weight_unit": "kg",
+    "height_value": "175",
+    "height_unit": "cm"
+}
+
+<> 2023-09-13T115150.201.json

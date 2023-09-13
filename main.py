@@ -2,11 +2,15 @@ from flask import Flask, jsonify, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
 from flask import jsonify
+from flask_cors import CORS
+
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5173/"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 ##Connect to Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///oldcafes.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 ## User Table configuration
@@ -91,7 +95,7 @@ def delete_cafe(cafe_id):
 
 
 
-@app.route("/all")
+@app.route("/allcafe")
 def all_cafes():
     cafes = db.session.query(Cafe).all()
     return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
@@ -106,23 +110,31 @@ def location():
     else:
         return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
+@app.route("/all")
+def all_users():
+    users = db.session.query(User).all()
+    return jsonify(users=[user.to_dict() for user in users])
 
 # Route for all the users
-@app.route("/users"), methods=["GET", "POST"]
-def get_all_users():
-    users = db.session.query(User).all()
-    user_length = len(users)
-    new_user = User(
-        email=request.form.get("email"),
-        name=request.form.get("name"),
-        password=request.form.get("password"),
-        membership_status=request.form.get("membership_status"),
-        weight_value=request.form.get("weight_value"),
-        weight_unit=request.form.get("weight_unit"),
-        height_value=request.form.get("height_value"),
-        height_unit=request.form.get("height_unit"),
-    )
-
+@app.route("/adduser", methods=["GET", "POST"])
+def create_new_user():
+    data = request.get_json()
+    if data:
+        new_user = User(
+            email=data.get("email"),
+            name=data.get("name"),
+            password=data.get("password"),
+            membership_status=data.get("membership_status"),
+            weight_value=data.get("weight_value"),
+            weight_unit=data.get("weight_unit"),
+            height_value=data.get("height_value"),
+            height_unit=data.get("height_unit"),
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"message": "User created successfully"}), 201
+    else:
+        return jsonify({"error": "Invalid JSON data"}), 400
 @app.route("/add", methods=["GET", "POST"])
 def post_new_cafe():
     cafes = db.session.query(Cafe).all()

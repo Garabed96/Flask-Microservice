@@ -48,11 +48,11 @@ export default function Account() {
                <Text m={'4'}>Account Page</Text>
             </Center>
             {isEditMode ? (
-               <Button ml={'8'} colorScheme="teal" onClick={handleSaveButton}>
+               <Button ml={'8'} mt={'4'} colorScheme="teal" onClick={handleSaveButton}>
                   Save
                </Button>
             ) : (
-               <Button ml={'8'} colorScheme="teal" onClick={handleEditButton}>
+               <Button ml={'8'} mt={'4'} colorScheme="teal" onClick={handleEditButton}>
                   Edit
                </Button>
             )}
@@ -64,9 +64,9 @@ export default function Account() {
                      </TableCaption>
                      <Thead>
                         <Tr maxWidth={'100%'}>
-                           <Th>Name</Th>
+                           <Th>Username</Th>
                            {isEditMode ? (
-                              <Td maxWidth={'200px'}>
+                              <Td>
                                  <Input
                                     maxWidth={'200px'}
                                     name="name"

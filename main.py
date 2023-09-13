@@ -5,7 +5,7 @@ from flask import jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5173/"}})
+cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 ##Connect to Database

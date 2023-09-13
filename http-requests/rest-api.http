@@ -21,3 +21,17 @@ Content-Type: application/json
 }
 
 <> 2023-09-13T115150.201.json
+
+###
+
+
+GET http://127.0.0.1:8000/users/1
+Accept: application/json
+Content-Type: application/json
+
+### Gets random user from database
+
+GET http://127.0.0.1:8000/random_user
+Accept: application/json
+Content-Type: application/json
+

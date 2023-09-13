@@ -6,10 +6,11 @@ export default function AdminTable() {
       name: string
       email: string
       membership_status: string
-      weight_value: string
-      height_value: string
+      weight_value: number
+      height_value: number
       weight_unit: string
       height_unit: string
+      id: number
    }
 
    const [userData, setUserData] = useState<User[]>([])

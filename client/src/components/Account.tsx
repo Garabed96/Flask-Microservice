@@ -12,6 +12,9 @@ import {
    TableContainer,
    Input,
 } from '@chakra-ui/react'
+import axios from 'axios'
+
+// We're fetching random user data, on refresh we pull a new random user
 export default function Account() {
    const [userData, setUserData] = useState({
       name: 'John Doe',
@@ -23,7 +26,18 @@ export default function Account() {
       height_unit: 'ft',
    })
 
-   useEffect(() => {}, [])
+   const baseURL = 'http://127.0.0.1:8000'
+   useEffect(() => {
+      axios
+         .get(`${baseURL}/random_user`) // Use template literals
+         .then((res) => {
+            console.log(res.data)
+            setUserData(res.data)
+         })
+         .catch((err) => {
+            console.log(err)
+         })
+   }, [])
 
    const [isEditMode, setIsEditMode] = useState(false)
 

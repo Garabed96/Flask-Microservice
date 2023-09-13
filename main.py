@@ -110,6 +110,16 @@ def location():
     else:
         return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
+
+# Get user by id Number
+@app.route("/users/<int:id>", methods=["GET"])
+def get_user_by_id(id):
+    user = db.session.query(User).filter_by(id=id).first()
+    if user:
+        return jsonify(user=user.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a user with that id."})
+
 @app.route("/all")
 def all_users():
     users = db.session.query(User).all()
@@ -155,10 +165,12 @@ def post_new_cafe():
     db.session.commit()
     return jsonify(response={"success": "Successfully added the new cafe."})
 
-@app.route("/random")
+
+# Random user
+@app.route("/random_user")
 def random():
-    cafe = choice(Cafe.query.all())
-    return jsonify(cafe.to_dict())
+    user = choice(User.query.all())
+    return jsonify(user.to_dict())
 
 
 ## HTTP GET - Read Record

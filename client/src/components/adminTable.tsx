@@ -1,4 +1,14 @@
-import { Table, Thead, Tbody, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react'
+import {
+   Table,
+   Thead,
+   Tbody,
+   Tr,
+   Th,
+   Td,
+   TableCaption,
+   TableContainer,
+   Button,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 export default function AdminTable() {
@@ -16,18 +26,28 @@ export default function AdminTable() {
    const [userData, setUserData] = useState<User[]>([])
 
    const baseURL = 'http://127.0.0.1:8000'
+
+   const deleteUser = async (id: number) => {
+      try {
+         await axios.delete(`${baseURL}/delete/${id}`)
+         // Handle success or perform any necessary actions after deletion.
+      } catch (error) {
+         // Handle errors if the request fails.
+         console.error('Delete user failed:', error)
+      }
+   }
+
    useEffect(() => {
       axios
          .get(`${baseURL}/all`) // Use template literals
          .then((res) => {
-            console.log(userData.length)
             console.log(res.data.users)
             setUserData(res.data.users)
          })
          .catch((err) => {
             console.log(err)
          })
-   }, [])
+   }, [deleteUser])
 
    return (
       <TableContainer>
@@ -65,6 +85,17 @@ export default function AdminTable() {
                            {user.weight_unit}
                         </Td>
                         <Td>{user.membership_status}</Td>
+                        <Td>
+                           <Button
+                              onClick={() => {
+                                 console.log('Deleting user with id:', user.id)
+                                 deleteUser(user.id)
+                              }}
+                              colorScheme="teal"
+                           >
+                              Delete
+                           </Button>
+                        </Td>
                      </Tr>
                   ))
                )}

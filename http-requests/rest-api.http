@@ -10,19 +10,19 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "name": "Michael Johnson",
-    "email": "michael@email.com",
-    "password": "123456",
-    "membership_status": "basic",
-    "weight_value": "75",
+    "name": "Michael JON BONES",
+    "email": "BONES@email.com",
+    "password": "69969",
+    "membership_status": "PREMIUM",
+    "weight_value": "130",
     "weight_unit": "kg",
-    "height_value": "175",
+    "height_value": "184",
     "height_unit": "cm"
 }
 
 <> 2023-09-13T115150.201.json
 
-###
+### We get a user by their id number
 
 
 GET http://127.0.0.1:8000/users/1
@@ -35,3 +35,8 @@ GET http://127.0.0.1:8000/random_user
 Accept: application/json
 Content-Type: application/json
 
+### Delete a user based off of their id number
+
+DELETE http://127.0.0.1:8000/delete/7
+Accept: application/json
+Content-Type: application/json

@@ -95,6 +95,7 @@ def delete_cafe(cafe_id):
 
 
 
+
 @app.route("/allcafe")
 def all_cafes():
     cafes = db.session.query(Cafe).all()
@@ -117,6 +118,17 @@ def get_user_by_id(id):
     user = db.session.query(User).filter_by(id=id).first()
     if user:
         return jsonify(user=user.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a user with that id."})
+
+# DELETE a user based of their id number
+@app.route("/delete/<int:id>", methods=["DELETE"])
+def delete_user(id):
+    user = db.session.query(User).filter_by(id=id).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify(response={"success": "Successfully deleted the user."})
     else:
         return jsonify(error={"Not Found": "Sorry, we don't have a user with that id."})
 

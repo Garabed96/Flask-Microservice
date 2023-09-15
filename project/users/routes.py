@@ -1,8 +1,6 @@
-from flask import Flask, jsonify, render_template, request
+from flask import jsonify, render_template, request
 from project.models import db, User, Cafe
 from random import choice
-from project.app import app
-from flask import render_template
 from . import users_blueprint
 
 

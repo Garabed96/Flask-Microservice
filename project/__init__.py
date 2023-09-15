@@ -1,9 +1,6 @@
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_cors import CORS
 from project.models import db
-import logging
-import os
-from flask.logging import default_handler
 
 def create_app(test_config=None):
     # Create the Flask app

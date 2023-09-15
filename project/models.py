@@ -8,7 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(250), unique=True, nullable=False)
     name = db.Column(db.String(250), nullable=False)
     password = db.Column(db.String(250), nullable=False)
-    membership_status = db.Column(db.VARCHAR(10), nullable=False) # "basic", "premium", "admin"
+    membership_status = db.Column(db.VARCHAR(10), nullable=False, default='basic') # "basic", "premium", "admin"
     # weight should be either kg or lbs
     weight_value = db.Column(db.Float, nullable=False)
     weight_unit = db.Column(db.VARCHAR(5), nullable=False)

@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, request
 from random import choice
 from flask import jsonify
 from flask_cors import CORS
-from models import db, User, Cafe
+from project.models import db, User, Cafe
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'

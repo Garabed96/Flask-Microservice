@@ -1,9 +1,9 @@
 import os
-
 import pytest
 
-from project import create_app, db
+from project import create_app
 from project.models import User
+
 
 
 # -------------------
@@ -25,4 +25,12 @@ def new_user():
 
 @pytest.fixture(scope='module')
 def test_client():
+    # Set the Testing configuration prior to create the Flask app
     os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
+    flask_app = create_app()
+
+    # Create a test client using the Flask app configured for testing
+    with flask_app.test_client() as testing_client:
+        # Establish an application context
+        with flask_app.app_context():
+            yield testing_client  # this is where the testing happens!

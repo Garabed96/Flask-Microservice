@@ -1,6 +1,9 @@
 from project import create_app
+import os
+from dotenv import load_dotenv
+load_dotenv('.env')  # take environment variables from .env.
 
-def test_home_page(client):
+def test_home_page():
     """
     GIVEN a Flask application configured for testing
     WHEN the '/' page is requested (GET)
@@ -8,6 +11,8 @@ def test_home_page(client):
     """
 
     # Set the Testing configuration prior to create the Flask app
+    os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
+    print(os.environ['CONFIG_TYPE'])
     flask_app = create_app()
 
     # Create a test client using the Flask application configured for testing
@@ -18,6 +23,6 @@ def test_home_page(client):
         assert b'Need an account?' in response.data
         assert b'Already have an account?' in response.data
 
-    response = client.get('/')
+    response = test_client.get('/')
     assert response.status_code == 200
     assert b'Welcome to the home page!' in response.data

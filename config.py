@@ -12,8 +12,9 @@ class Config(object):
     FLASK_ENV = 'development'
     DEBUG = False
     TESTING = False
-    SECRET_KEY = os.getenv('SECRET_KEY', default='BAD_SECRET_KEY')
+    # SECRET_KEY = os.getenv('SECRET_KEY', default='BAD_SECRET_KEY')
     # If were in production mode, replace the DEVELOPMENT_DATABASE_URI with the PRODUCTION_DATABASE_URI
+
     if os.getenv('DATABASE_URL'):
         SQLALCHEMY_DATABASE_URI = os.getenv('DEPLOYMENT_DATABASE_URI')
     else:
@@ -33,6 +34,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    print("TESTING CONFIG RUNNING")
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("TESTING_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI = os.getenv("TESTING_DATABASE_URI", default='sqlite:///test.db')
     WTF_CSRF_ENABLED = False

@@ -1,10 +1,20 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
-from project.models import db
 import os
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv('.env')  # take environment variables from .env.
+
+# -------------------
+# Configuration
+# -------------------
+
+# Create instance of Flask (Flask-sqlalchemy) in global scope
+db = SQLAlchemy()
+
+
+
 def create_app(test_config=None):
     # Create the Flask app
     app = Flask(__name__)

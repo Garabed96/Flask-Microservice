@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from project import db
 
 ## User Table configuration
 class User(db.Model):

@@ -1,7 +1,10 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from project.models import db
+import os
+from dotenv import load_dotenv
 
+load_dotenv('.env')  # take environment variables from .env.
 def create_app(test_config=None):
     # Create the Flask app
     app = Flask(__name__)
@@ -12,9 +15,8 @@ def create_app(test_config=None):
     app.config['CORS_HEADERS'] = 'Content-Type'
 
     register_blueprints(app)
-
     ##Connect to Database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DEVELOPMENT_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
     with app.app_context():

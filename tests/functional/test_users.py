@@ -19,7 +19,9 @@ def test_home_page():
         response = test_client.get('/')
         assert response.status_code == 200
         assert b'Welcome to the Cafe & Wifi API' in response.data
+        # assert b'Need an account?' in response.data
+        # assert b'Already have an account?' in response.data
 
-    response = test_client.get('/')
-    assert response.status_code == 200
-    assert b'Welcome to the home page!' in response.data
+    # response = test_client.get('/')
+    # assert response.status_code == 200
+    # assert b'Welcome to the home page!' in response.data

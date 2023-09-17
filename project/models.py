@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from project import db
 
 ## User Table configuration
 class User(db.Model):
@@ -18,11 +16,6 @@ class User(db.Model):
     def to_dict(self):
         # I'm returning a dictionary representation of the User object.
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
-        # dict = {}
-        # # Loop through each column in the data record
-        # for column in self.__table__.columns:
-        #     dict[column.name] = getattr(self, column.name)
-        # return dict
 
 
 ##Cafe TABLE Configuration

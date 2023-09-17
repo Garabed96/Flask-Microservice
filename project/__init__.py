@@ -1,5 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
+from click import echo
 from flask import Flask
 from flask.logging import default_handler
 from flask_cors import CORS
@@ -24,13 +25,18 @@ def create_app():
     app = Flask(__name__)
     print(os.getenv('CONFIG_TYPE'))
     # Configure the app
-    # config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
-    CORS(app)
-    app.config['CORS_HEADERS'] = 'Content-Type'
+    config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
+    print(config_type, "typess")
+    app.config.from_object(config_type)
 
-    engine = sa
+    app.config['CORS_HEADERS'] = 'Content-Type'
+    app.config.from_object(config_type)
+    print(os.getenv('SQLALCHEMY_DATABASE_URI'), 'SQLALCHEMY_DATABASE_URI')
+    CORS(app)
 
     register_blueprints(app)
+    initialize_extensions(app)
+    configure_logging(app)
     ##Connect to Database
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DEVELOPMENT_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -80,3 +86,11 @@ def configure_logging(app):
 def register_blueprints(app):
     from project.users import users_blueprint
     app.register_blueprint(users_blueprint)
+
+def register_cli_commands(app):
+    @app.cli.command('init_db')
+    def initialize_database():
+        """Initialize the database."""
+        # db.drop_all()
+        db.create_all()
+        echo('Initialized the database!')

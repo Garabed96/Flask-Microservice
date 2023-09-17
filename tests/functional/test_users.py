@@ -2,7 +2,6 @@ from project import create_app
 import os
 from dotenv import load_dotenv
 load_dotenv('.env')  # take environment variables from .env.
-
 def test_home_page():
     """
     GIVEN a Flask application configured for testing
@@ -19,9 +18,7 @@ def test_home_page():
     with flask_app.test_client() as test_client:
         response = test_client.get('/')
         assert response.status_code == 200
-        assert b'Welcome to the home page!' in response.data
-        assert b'Need an account?' in response.data
-        assert b'Already have an account?' in response.data
+        assert b'Welcome to the Cafe & Wifi API' in response.data
 
     response = test_client.get('/')
     assert response.status_code == 200

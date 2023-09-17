@@ -9,7 +9,8 @@ import sqlalchemy as sa
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
-load_dotenv('.env')  # take environment variables from .env.
+load_dotenv()  # take environment variables from .env.
+BASEDIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 # -------------------
 # Configuration
@@ -25,12 +26,11 @@ def create_app():
     app = Flask(__name__)
     print(os.getenv('CONFIG_TYPE'))
     # Configure the app
-    config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
-    print(config_type, "typess")
+    config_type = os.getenv('CONFIG_TYPE')
+    print(config_type, "config_type")
     app.config.from_object(config_type)
 
     app.config['CORS_HEADERS'] = 'Content-Type'
-    app.config.from_object(config_type)
     print(os.getenv('SQLALCHEMY_DATABASE_URI'), 'SQLALCHEMY_DATABASE_URI')
     CORS(app)
 
@@ -38,7 +38,6 @@ def create_app():
     initialize_extensions(app)
     configure_logging(app)
     ##Connect to Database
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DEVELOPMENT_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
@@ -71,7 +70,7 @@ def configure_logging(app):
         app.logger.handlers = gunicorn_logger.handlers
         app.logger.setLevel(gunicorn_logger.level)
     else:
-        file_handler = RotatingFileHandler('instance/flask-logs.log', maxBytes=10240, backupCount=10)
+        file_handler = RotatingFileHandler(f'{BASEDIR}/instance/flask-logs.log', maxBytes=10240, backupCount=10)
         file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
         file_handler.setFormatter(file_formatter)
         file_handler.setLevel(logging.INFO)

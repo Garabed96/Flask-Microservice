@@ -7,6 +7,9 @@ from . import users_blueprint
 # -------------------------#
 #        Routes
 # -------------------------#
+
+## TODO: Implement Flask-RESTful to complete the API and better error handling
+
 @users_blueprint.route("/")
 def home():
     print()

@@ -5,7 +5,7 @@ from flask import Flask
 from flask.logging import default_handler
 from flask_cors import CORS
 import os
-import sqlalchemy as sa
+import sqlalchemy
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
@@ -40,9 +40,8 @@ def create_app():
 
 
     ## Check if dB needs to be initialized
-    engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=True)
-    inspector = sa.inspect(engine)
-    if not inspector.has_table("users"):
+    engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=True)
+    if not sqlalchemy.inspect(engine).has_table("USER"):
         print("CREATING TABLES")
         with app.app_context():
             db.create_all()

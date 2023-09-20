@@ -17,7 +17,7 @@ def test_home_page():
     with flask_app.test_client() as test_client:
         response = test_client.get('/')
         assert response.status_code == 200
-        assert b'Welcome to the Cafe & Wifi API' in response.data
+        assert b'Welcome to the SumPlus App Dashboard' in response.data
         # assert b'Need an account?' in response.data
         # assert b'Already have an account?' in response.data
 

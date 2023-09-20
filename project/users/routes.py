@@ -2,7 +2,7 @@ from flask import jsonify, render_template, request
 from project.models import db, User, Cafe
 from random import choice
 from . import users_blueprint
-
+import os
 
 # -------------------------#
 #        Routes
@@ -10,6 +10,9 @@ from . import users_blueprint
 
 ## TODO: Implement Flask-RESTful to complete the API and better error handling
 
+# BASEDIR to locate client/index.html
+BASEDIR = os.path.abspath(os.path.abspath(__file__))
+print(BASEDIR, "ROUTES BASEDIR")
 @users_blueprint.route("/")
 def home():
     print()

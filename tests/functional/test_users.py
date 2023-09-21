@@ -2,6 +2,9 @@ from project import create_app
 import os
 from dotenv import load_dotenv
 load_dotenv('.env')  # take environment variables from .env.
+import json
+SHOW_ALL = 'http://127.0.0.1:8000/all'
+
 def test_home_page():
     """
     GIVEN a Flask application configured for testing
@@ -29,19 +32,24 @@ def test_home_page():
 def test_home_page_all():
     """
     GIVEN a Flask application configured for testing
-    WHEN the '/' page is requested (GET)
+    WHEN the '/all' page is requested (GET)
     THEN check that the response is valid
     """
-    # Set the Testing configuration prior to create the Flask app
     os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
     flask_app = create_app()
 
-    # Create a test client using the Flask application configured for testing
+    # Create a test client using Flask app configured for testing
     with flask_app.test_client() as test_client:
-        response = test_client.get('/all')
-        assert response.status_code == 200
-        # Assert that the response is of type dict (a JSON)
-        assert isinstance(response, dict)
+        response = test_client.get(SHOW_ALL)
 
-        # Assert that the users field in the response is of type list
-        assert isinstance(response['users'], list)
+        # Check the return status code
+        assert response.status_code == 200
+
+        # Parse the JSON response
+        response_data = json.loads(response.data)
+
+        # Check content of each user in the response
+        for user in response_data['users']:
+            assert isinstance(user['email'], str)
+            assert isinstance(user['name'], str)
+

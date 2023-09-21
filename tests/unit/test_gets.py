@@ -68,7 +68,7 @@ def test_get_specific_user():
 
     # Create a test client using Flask app configured for testing
     with flask_app.test_client() as test_client:
-        response = test_client.get('users/1')
+        response = test_client.get('users/4')
 
         # Check the return status code
         assert response.status_code == 200

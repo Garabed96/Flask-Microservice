@@ -7,7 +7,6 @@ GET_RANDOM_USER = ' http://127.0.0.1:8000/random_user'
 UPDATE_USERS_NAME = 'http://127.0.0.1:8000/update'
 CREATE_USER = 'http://127.0.0.1:8000/adduser'
 GET_SPECIFIC_USER = 'http://127.0.0.1:8000/user'
-DELETE_SPECIFIC_USER = 'http://127.0.0.1:8000/delete'
 
 # just checking if endpoint working, useless test we can just check in http-client
 def test_show_all_users():

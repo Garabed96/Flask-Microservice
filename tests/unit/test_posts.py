@@ -28,6 +28,7 @@ def test_create_new_user():
         "height_value": "184",
         "height_unit": "cm"
     }
+    print("SETTING UNIQUE NAME", unique_name, "and unique email", unique_email)
     # Create a test client using Flask app configured for testing
     with flask_app.test_client() as test_client:
         response = test_client.post(CREATE_USER, json=payload)

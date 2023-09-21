@@ -2,7 +2,6 @@ from flask import jsonify, render_template, request
 from project.models import db, User, Cafe
 from random import choice
 from . import users_blueprint
-import os
 
 # -------------------------#
 #        Routes
@@ -10,9 +9,6 @@ import os
 
 ## TODO: Implement Flask-RESTful to complete the API and better error handling
 
-# BASEDIR to locate client/index.html
-BASEDIR = os.path.abspath(os.path.abspath(__file__))
-print(BASEDIR, "ROUTES BASEDIR")
 @users_blueprint.route("/")
 def home():
     print()
@@ -82,7 +78,6 @@ def create_new_user():
 @users_blueprint.route("/add", methods=["GET", "POST"])
 def post_new_cafe():
     cafes = db.session.query(Cafe).all()
-    cafe_length = len(cafes)
     new_cafe = Cafe(
         name=request.form.get("name"),
         map_url=request.form.get("map_url"),

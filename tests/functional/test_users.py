@@ -24,3 +24,24 @@ def test_home_page():
     # response = test_client.get('/')
     # assert response.status_code == 200
     # assert b'Welcome to the home page!' in response.data
+
+
+def test_home_page_all():
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the '/' page is requested (GET)
+    THEN check that the response is valid
+    """
+    # Set the Testing configuration prior to create the Flask app
+    os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
+    flask_app = create_app()
+
+    # Create a test client using the Flask application configured for testing
+    with flask_app.test_client() as test_client:
+        response = test_client.get('/all')
+        assert response.status_code == 200
+        # Assert that the response is of type dict (a JSON)
+        assert isinstance(response, dict)
+
+        # Assert that the users field in the response is of type list
+        assert isinstance(response['users'], list)

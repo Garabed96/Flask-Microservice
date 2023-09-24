@@ -3,10 +3,12 @@ from project.models import db, User, Cafe
 from random import choice
 from . import users_blueprint
 
-
 # -------------------------#
 #        Routes
 # -------------------------#
+
+## TODO: Implement Flask-RESTful to complete the API and better error handling
+
 @users_blueprint.route("/")
 def home():
     print()
@@ -76,7 +78,6 @@ def create_new_user():
 @users_blueprint.route("/add", methods=["GET", "POST"])
 def post_new_cafe():
     cafes = db.session.query(Cafe).all()
-    cafe_length = len(cafes)
     new_cafe = Cafe(
         name=request.form.get("name"),
         map_url=request.form.get("map_url"),

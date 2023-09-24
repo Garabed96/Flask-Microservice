@@ -5,7 +5,7 @@ from flask import Flask
 from flask.logging import default_handler
 from flask_cors import CORS
 import os
-import sqlalchemy as sa
+import sqlalchemy
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,29 +24,26 @@ db = SQLAlchemy()
 def create_app():
     # Create the Flask app
     app = Flask(__name__)
-    print(os.getenv('CONFIG_TYPE'))
+
     # Configure the app
     config_type = os.getenv('CONFIG_TYPE')
-    print(config_type, "config_type")
     app.config.from_object(config_type)
-
+    print(config_type, "config_type")
+    print(f'{app.config["SQLALCHEMY_DATABASE_URI"]}, "SQLALCHEMY_DATABASE_URI"')
     app.config['CORS_HEADERS'] = 'Content-Type'
-    print(os.getenv('SQLALCHEMY_DATABASE_URI'), 'SQLALCHEMY_DATABASE_URI')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     CORS(app)
 
     register_blueprints(app)
     initialize_extensions(app)
     configure_logging(app)
-    ##Connect to Database
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
-    engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=True)
-    inspector = sa.inspect(engine)
-    if not inspector.has_table("users"):
+    ## Check if dB needs to be initialized
+    engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=True)
+    if not sqlalchemy.inspect(engine).has_table("USER"):
         print("CREATING TABLES")
         with app.app_context():
-            # db.drop_all()
             db.create_all()
         app.logger.info("CREATING DB TABLES")
     else:

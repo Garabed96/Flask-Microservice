@@ -4,7 +4,8 @@ import pytest
 from project import create_app
 from project.models import User
 
-
+# Testing blog example from:
+# https://testdriven.io/blog/flask-pytest/#why-write-tests
 
 # -------------------
 # Fixtures
